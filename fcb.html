@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FCP Question Bank</title>
+<style>
+:root{--bg:#0f1b2d;--card:#16263e;--ink:#eef3fb;--muted:#9db2d4;--accent:#5b9bd5;--good:#3aa76d;--bad:#d56b6b;--line:#274064;}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);}
+.wrap{max-width:780px;margin:0 auto;padding:20px;}
+h1{font-size:20px;margin:6px 0 2px}.sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+select,button{font-size:14px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#04101f;font-weight:bold}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
+.tag{display:inline-block;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:2px 10px;margin-right:6px}
+.q{font-size:16px;line-height:1.55;margin:12px 0;font-weight:bold}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.opt{text-align:left;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#11203550;color:var(--ink);font-size:14px;cursor:pointer;line-height:1.4}
+.opt:hover{border-color:var(--accent)}
+.opt.correct{background:#163a2a;border-color:var(--good);color:#bdf0d2}
+.opt.wrong{background:#3a1d1d;border-color:var(--bad);color:#f0caca}
+.opt:disabled{cursor:default}
+.exp{display:none;border-top:1px dashed var(--line);margin-top:14px;padding-top:14px;line-height:1.55;font-size:14px}
+.exp.show{display:block}.exp b{color:var(--accent)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.score{color:var(--muted);font-size:13px;margin-left:auto}.small{font-size:12px;color:var(--muted)}
+</style></head><body><div class="wrap">
+<h1>FCP — Question Bank</h1>
+<div class="sub">Options and answers match the master spreadsheet exactly. Pick the best answer, then read the explanation.</div>
+<div class="bar">
+  <label class="small">Lecture:&nbsp;</label><select id="lec"></select>
+  <label class="small">&nbsp;Difficulty:&nbsp;</label>
+  <select id="diff"><option value="ALL">All</option><option>easy</option><option>medium</option><option>hard</option></select>
+  <button class="primary" id="start">Start / Restart</button>
+  <label class="small">&nbsp;<input type="checkbox" id="shuf"> shuffle question order</label>
+  <span class="score" id="score"></span>
+</div>
+<div id="stage"></div></div>
+<script>
+const DATA=[
+ {
+  "q": "A patient's parallel light rays converge to a focal point anterior to the retina. Which refractive error best describes this finding, and with which type of corrective lens is it treated?",
+  "opts": [
+   "Presbyopia, corrected with reading glasses",
+   "Myopia, corrected with a concave (minus) lens",
+   "Hypermetropia, corrected with a convex (plus) lens",
+   "Astigmatism, corrected with a cylindrical lens"
+  ],
+  "correct": 1,
+  "exp": "Myopia (nearsightedness) is defined as parallel rays converging anterior to the retina, requiring a concave (diverging) lens to push the focal point back onto the retina. Hypermetropia is the opposite — focal point posterior to the retina requiring a convex lens. Astigmatism involves two focal lines rather than a single point. Presbyopia is an age-related loss of accommodation, not described by a focal point anterior to the retina.",
+  "lecture": "[058a] FCP - Intro to Ophthalmology Lecture.pdf",
+  "topic": "Errors of Refraction",
+  "diff": "medium"
+ },
+ {
+  "q": "Which of the following statements best explains why the cornea — rather than the crystalline lens — is considered the major refractive component of the eye?",
+  "opts": [
+   "The cornea is the first and most curved transparent structure light encounters, providing the greatest refractive contribution",
+   "The lens is vascular and therefore cannot consistently refract light, making the cornea the primary refractive surface",
+   "The aqueous humor behind the cornea amplifies its refractive power to a greater extent than the vitreous does for the lens",
+   "The cornea is biconvex and held by zonules, giving it a greater refractive power than the lens"
+  ],
+  "correct": 0,
+  "exp": "The lecture explicitly states that the cornea plays the 'major role' in the refractive system and is described as the main refractive surface. Being transparent, avascular, and the first curved medium light passes through accounts for its dominant refractive contribution. Another option incorrectly attributes the biconvex shape and zonule support to the cornea — those belong to the lens. Another option is incorrect because the lens is also avascular (as stated in the lecture). Another option is a plausible-sounding distractor but is not supported by the lecture.",
+  "lecture": "[058a] FCP - Intro to Ophthalmology Lecture.pdf",
+  "topic": "Refractive System of the Eye",
+  "diff": "medium"
+ },
+ {
+  "q": "During a routine eye examination, a student performs a fundus examination. Which of the following structures would be directly visualized as part of the retinal structures during this examination?",
+  "opts": [
+   "Retinal artery, retinal vein, macula, and optic disc",
+   "Iris, pupil, cornea, and optic nerve",
+   "Extraocular muscles, optic nerve fibers, and ciliary body",
+   "Crystalline lens, zonules, aqueous humor, and vitreous"
+  ],
+  "correct": 0,
+  "exp": "The lecture specifically lists retinal artery, retinal vein, macula, and optic disc as the retinal structures visualized during fundus examination. Another option lists anterior segment structures (iris, pupil, cornea) which are not fundus structures. Another option describes components of the refractive system, not the fundal view. Another option includes extraocular muscles and the ciliary body, which are not visible on fundoscopy.",
+  "lecture": "[058a] FCP - Intro to Ophthalmology Lecture.pdf",
+  "topic": "Eye Examination / Fundus",
+  "diff": "hard"
+ },
+ {
+  "q": "A 45-year-old intoxicated male is found unresponsive with gurgling and snoring sounds, SpO2 89%, and a respiratory rate of 7/min. After opening the airway with a jaw thrust, which suctioning catheter is MOST appropriate to clear his oropharynx of vomitus?",
+  "opts": [
+   "Flexible suction catheter, because it can reach the endotracheal depth more safely",
+   "Nasopharyngeal suction catheter, because it bypasses the gag reflex",
+   "Flexible suction catheter, because it is gentler on mucous membranes",
+   "Rigid (Yankauer) suction catheter, because it is ideal for thick secretions and vomitus"
+  ],
+  "correct": 3,
+  "exp": "The lecture states that the rigid (Yankauer) catheter is ideal for thick secretions, blood, and vomitus in the oropharynx. The flexible catheter is used for oropharyngeal, nasopharyngeal, and endotracheal suctioning of thinner secretions. In this case with vomitus, the Yankauer is the correct choice. Two of the other options describe the flexible catheter's role, which is not optimal for thick vomitus. Another option is not an appropriate indication in this context.",
+  "lecture": "Airway Management and Oxygen Delivery.pdf",
+  "topic": "Airway Clearance and Suctioning",
+  "diff": "medium"
+ },
+ {
+  "q": "A semi-conscious trauma patient has an intact gag reflex. Which airway adjunct is most appropriate to maintain airway patency in this patient?",
+  "opts": [
+   "Oropharyngeal airway (OPA) because it can be used in conscious patients without risk",
+   "Oropharyngeal airway (OPA) sized by measuring from incisors to the angle of the jaw",
+   "Nasopharyngeal airway (NPA) sized by the diameter of the anterior nares or little finger",
+   "Nasopharyngeal airway (NPA) avoided because it increases risk of aspiration in semi-conscious patients"
+  ],
+  "correct": 2,
+  "exp": "The lecture specifies that the NPA can be used in semi-conscious patients with an intact gag reflex, sized against the anterior nares or little finger. The OPA is only used in unconscious patients; in semi-conscious or conscious patients it can trigger vomiting and aspiration. Another option incorrectly applies OPA to this patient. Another option is factually wrong per the lecture. Another option incorrectly states NPA should be avoided here.",
+  "lecture": "Airway Management and Oxygen Delivery.pdf",
+  "topic": "Simple Airway Adjuncts",
+  "diff": "medium"
+ },
+ {
+  "q": "A patient with COPD requires supplemental oxygen. According to the monitoring parameters in the lecture, what is the correct SpO2 target range and the most appropriate low-flow delivery device for chronic home oxygen therapy in this patient?",
+  "opts": [
+   "SpO2 target 88-92%; face mask with reservoir bag at 10-15 L/min",
+   "SpO2 target 94-98%; nasal cannula at 2-4 L/min",
+   "SpO2 target 94-98%; simple face mask at 6-10 L/min",
+   "SpO2 target 88-92%; nasal cannula at 2-4 L/min"
+  ],
+  "correct": 3,
+  "exp": "The lecture states that the SpO2 target in COPD is 88-92% (to avoid suppressing the hypoxic drive) and that nasal cannulae at 2-4 L/min are suitable for non-critical patients and those who need chronic oxygen therapy including COPD patients. Another option gives the wrong SpO2 target (94-98% is for general patients, not COPD). Another option uses a reservoir mask (high-flow device) which is not indicated for chronic low-flow COPD therapy. Another option also applies the wrong target and wrong device.",
+  "lecture": "Airway Management and Oxygen Delivery.pdf",
+  "topic": "Oxygen Delivery Devices and Monitoring",
+  "diff": "hard"
+ },
+ {
+  "q": "During oropharyngeal suctioning, the correct technique as described in the lecture requires pre-oxygenation with 100% oxygen for 30-60 seconds before suctioning. What is the recommended maximum duration of each suction pass and the typical suction pressure for adults?",
+  "opts": [
+   "Each pass limited to 10-15 seconds; pressure 80-120 mmHg",
+   "Each pass limited to 20-30 seconds; pressure 80-120 mmHg",
+   "Each pass limited to 10-15 seconds; pressure 140-160 mmHg",
+   "Each pass limited to 5-10 seconds; pressure 40-60 mmHg"
+  ],
+  "correct": 0,
+  "exp": "The lecture explicitly states that each suction pass should be limited to 10-15 seconds to avoid over-suctioning, and the suction pressure is typically set at 80-120 mmHg for adults. Another option uses a shorter time and lower pressure not stated in the lecture. Another option uses the correct time but an excessively high pressure not mentioned. Another option uses the correct pressure but an excessively long duration which risks over-suctioning.",
+  "lecture": "Airway Management and Oxygen Delivery.pdf",
+  "topic": "Suction Technique and Precautions",
+  "diff": "easy"
+ },
+ {
+  "q": "A patient recovering from influenza no longer has symptoms but laboratory tests confirm he is still shedding virus and can transmit it to others. Which type of human reservoir does this patient BEST represent?",
+  "opts": [
+   "An environmental reservoir",
+   "Asymptomatic carrier",
+   "A case with symptomatic illness",
+   "Symptomatic carrier in the convalescence phase"
+  ],
+  "correct": 3,
+  "exp": "The lecture defines a symptomatic carrier as one in whom the carrier state may occur during the incubation period, convalescence, and post-convalescence of a clinically recognisable disease (e.g. influenza). This patient has passed the acute illness phase but is still infectious, fitting the convalescent symptomatic carrier definition. An asymptomatic carrier never shows symptoms at all. A 'case' refers to a person with active symptomatic illness. An environmental reservoir is non-human.",
+  "lecture": "FCP [005] Introduction to infection control measures .pdf",
+  "topic": "Reservoirs of Infection – Human Carriers",
+  "diff": "medium"
+ },
+ {
+  "q": "During an outbreak investigation, epidemiologists find that residents of a housing block contracted Legionnaires' disease after exposure to the building's water cooling system. According to the chain of infection, which link is MOST directly implicated as the reservoir in this scenario?",
+  "opts": [
+   "Animal reservoir (rodents carrying infected vectors)",
+   "Human asymptomatic carrier in the building",
+   "Built environmental reservoir (contaminated water system)",
+   "Soil reservoir containing bacterial spores"
+  ],
+  "correct": 2,
+  "exp": "The lecture explicitly lists Legionnaires' bacillus as an agent for which water can be the primary reservoir, and also identifies farm equipment, objects, and surfaces as 'built environmental reservoirs.' A cooling water system fits the built/water environmental reservoir category. Animal reservoirs (rodents/vectors) relate to diseases like plague. An asymptomatic human carrier is a human reservoir. Soil reservoirs are associated with agents such as tetanus spores, not Legionella.",
+  "lecture": "FCP [005] Introduction to infection control measures .pdf",
+  "topic": "Reservoirs of Infection – Environment",
+  "diff": "medium"
+ },
+ {
+  "q": "An immunocompromised patient on cytotoxic chemotherapy is admitted to a ward where another patient has active tuberculosis. Mycobacterium tuberculosis travels as dried droplet nuclei smaller than 5 µm that remain suspended in the air. Which combination of chain-of-infection links BEST describes the route from the source patient to the susceptible host in this scenario?",
+  "opts": [
+   "Portal of exit: respiratory tract → mode of transmission: indirect airborne (droplet nuclei) → portal of entry: respiratory tract",
+   "Portal of exit: respiratory tract → mode of transmission: direct droplet spread (>5 µm) → portal of entry: gastrointestinal tract",
+   "Portal of exit: skin lesion → mode of transmission: direct contact → portal of entry: respiratory tract",
+   "Portal of exit: gastrointestinal tract → mode of transmission: vehicle (fomite) → portal of entry: mucous membrane"
+  ],
+  "correct": 0,
+  "exp": "The lecture states that portals of exit include the respiratory tract, and that indirect airborne transmission involves droplet nuclei – dried droplet residues usually less than 5 µm that remain suspended in the air. TB fits this airborne indirect route, with the respiratory tract as both portal of exit and portal of entry. Another option incorrectly assigns a gastrointestinal exit and vehicle/fomite transmission. Another option incorrectly names the skin as the exit route. Another option confuses airborne (small droplet nuclei <5 µm) with direct droplet spread (larger droplets that fall within a few feet), and assigns the gastrointestinal tract as the portal of entry, which is inconsistent with TB pathophysiology as described in the lecture.",
+  "lecture": "FCP [005] Introduction to infection control measures .pdf",
+  "topic": "Modes of Transmission and Chain of Infection",
+  "diff": "hard"
+ },
+ {
+  "q": "A breathless patient is suspected of having heart failure. Their NTproBNP result returns at 1500 ng/L. According to NICE cutoffs, what is the most appropriate next step?",
+  "opts": [
+   "Repeat the NTproBNP in 24 hours before making any referral decision",
+   "Reassure the patient that heart failure is unlikely and discharge",
+   "Refer urgently for transthoracic Doppler 2D echocardiography and specialist assessment within 2 weeks",
+   "Refer for transthoracic Doppler 2D echocardiography and specialist assessment within 6 weeks"
+  ],
+  "correct": 3,
+  "exp": "A NTproBNP of 1500 ng/L falls in the 400–2000 ng/L range, which requires referral for transthoracic Doppler 2D echocardiography and specialist assessment within 6 weeks. A result <400 ng/L would make heart failure unlikely. A result >2000 ng/L would require urgent referral within 2 weeks. Repeating the test is not indicated by NICE guidelines at this level.",
+  "lecture": "FCP [008a,b] Introduction to Clinical Biochemistry Lab Tests.pdf",
+  "topic": "Risk assessment and NTproBNP cutoffs",
+  "diff": "medium"
+ },
+ {
+  "q": "A blood sample is taken with a prolonged tourniquet (cuff) time. Which pattern of results is most consistent with this pre-analytical error?",
+  "opts": [
+   "Decreased sodium, increased urea, and unchanged calcium",
+   "Increased calcium, increased albumin, and increased haemoglobin",
+   "Increased potassium, decreased albumin, and unchanged haemoglobin",
+   "Decreased calcium, decreased albumin, and decreased haemoglobin"
+  ],
+  "correct": 1,
+  "exp": "Prolonged cuff (tourniquet) time causes venostasis and haemoconcentration, increasing calcium (2.38 to 2.58 mmol/L), albumin (39 to 43 g/L), and haemoglobin (14.7 to 15.5 g/dL) as shown in the lecture data. All three values rise progressively with cuff time from 0 to 6 minutes. A decrease in these values or changes in potassium/sodium would not be the expected pattern from venostasis alone.",
+  "lecture": "FCP [008a,b] Introduction to Clinical Biochemistry Lab Tests.pdf",
+  "topic": "Pre-analytical errors – cuff time / venostasis",
+  "diff": "medium"
+ },
+ {
+  "q": "When drawing multiple blood samples from a single venepuncture, which of the following represents the correct order of draw according to the lecture?",
+  "opts": [
+   "Sodium citrate tubes, then SST tubes, then heparin tubes, then blood culture tubes",
+   "SST tubes, then fluoride oxalate tubes, then blood culture tubes, then plain tubes",
+   "EDTA tubes, then heparin tubes, then plain tubes, then blood culture tubes",
+   "Blood culture tubes, then plain tubes, then sodium citrate tubes, then EDTA tubes"
+  ],
+  "correct": 3,
+  "exp": "The correct order of draw listed in the lecture is: (1) blood culture tubes, (2) plain tubes, (3) sodium citrate, (4) thrombin clot activator, (5) SST, (6) heparin, (7) EDTA, (8) fluoride oxalate. Another option correctly places blood culture tubes first, plain tubes second, and sodium citrate third with EDTA later, consistent with this sequence. The other options invert or misplace critical steps.",
+  "lecture": "FCP [008a,b] Introduction to Clinical Biochemistry Lab Tests.pdf",
+  "topic": "Blood sample collection – order of draw",
+  "diff": "hard"
+ },
+ {
+  "q": "A blood sample is taken from a patient's drip arm where 5% dextrose is infusing. Compared to the non-drip arm, what result pattern is most likely?",
+  "opts": [
+   "Na 110 mmol/L, K 3.1 mmol/L, HCO3 17 mmol/L, albumin 31 g/L",
+   "Na 135 mmol/L, K 4.5 mmol/L, HCO3 24 mmol/L, albumin 38 g/L",
+   "Na 140 mmol/L, K 4.0 mmol/L, albumin 40 g/L",
+   "Na 150 mmol/L, K 5.5 mmol/L, HCO3 30 mmol/L, albumin 45 g/L"
+  ],
+  "correct": 0,
+  "exp": "The lecture provides exact values for drip-arm sampling with a dextrose drip: Na 110, K 3.1, HCO3 17, albumin 31 g/L, all significantly lower than the non-drip arm values (Na 140, K 4.0, HCO3 22, albumin 40 g/L). The dextrose infusion dilutes the sample. Another option reflects normal non-drip arm values, while those options represent neither scenario correctly.",
+  "lecture": "FCP [008a,b] Introduction to Clinical Biochemistry Lab Tests.pdf",
+  "topic": "Pre-analytical errors – drip arm contamination",
+  "diff": "medium"
+ },
+ {
+  "q": "A reference range for a biochemical test is established using a Gaussian distribution from a large healthy population. What percentage of entirely healthy individuals would be expected to have a result OUTSIDE this reference range?",
+  "opts": [
+   "2.5%",
+   "10%",
+   "5%",
+   "1%"
+  ],
+  "correct": 2,
+  "exp": "The lecture states that the reference range covers the mean ± 2 SD, encompassing 95% of healthy individuals. Therefore 5% of healthy people will fall outside the range (2.5% above and 2.5% below). This is a key reason why a single mildly abnormal result should not automatically be interpreted as pathological without clinical context.",
+  "lecture": "FCP [008a,b] Introduction to Clinical Biochemistry Lab Tests.pdf",
+  "topic": "Reference ranges and Gaussian distribution",
+  "diff": "easy"
+ },
+ {
+  "q": "During pregnancy, which of the following biochemical changes is best explained by increased placental synthesis rather than a dilutional or filtration effect?",
+  "opts": [
+   "Reduced serum creatinine concentration",
+   "Reduced haemoglobin concentration",
+   "Elevated serum alkaline phosphatase (ALP)",
+   "Lower free T4 and free T3 in the second and third trimesters"
+  ],
+  "correct": 2,
+  "exp": "The lecture explicitly states that serum ALP rises in pregnancy due to placental synthesis. The reduced creatinine is due to increased GFR (filtration effect). Reduced haemoglobin is due to plasma volume expanding more than red cell mass (dilution). Lower FT4/FT3 in the 2nd and 3rd trimester is a separate pregnancy-related change not attributed to placental synthesis.",
+  "lecture": "FCP [008a,b] Introduction to Clinical Biochemistry Lab Tests.pdf",
+  "topic": "Physiological variation – pregnancy",
+  "diff": "medium"
+ },
+ {
+  "q": "A 65-year-old man with chronic liver disease presents to the emergency department with severe upper GI bleeding from ruptured oesophageal varices and a deteriorating level of consciousness. Which metabolic consequence of his bleeding BEST explains the development of hepatic encephalopathy?",
+  "opts": [
+   "Absorption of amino acids from digested blood increases ammonia production that the failing liver cannot convert to urea",
+   "Conjugated bilirubin accumulates in the brain because the liver cannot excrete it into the bile canaliculi",
+   "Massive blood loss reduces oxygen delivery causing lactic acidosis that crosses the blood-brain barrier",
+   "Elevated serum creatinine from prerenal azotaemia directly causes neurotoxicity"
+  ],
+  "correct": 0,
+  "exp": "The lecture explicitly states that bleeding from oesophageal varices causes hepatic encephalopathy because amino acids from digested blood are absorbed, increasing ammonia, which the diseased liver cannot convert to urea via the urea cycle. Lactic acidosis (B) is not the mechanism described. Elevated creatinine (C) reflects prerenal azotaemia from haemorrhage but is not the neurotoxin implicated. Conjugated bilirubin (D) produces jaundice, not encephalopathy.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Hepatic encephalopathy and ammonia metabolism",
+  "diff": "hard"
+ },
+ {
+  "q": "A patient's blood results show: BUN 42 mg/dL, serum creatinine 1.1 mg/dL. The BUN/creatinine ratio is approximately 38:1. Which condition BEST explains this pattern?",
+  "opts": [
+   "Low protein intake causing reduced urea synthesis",
+   "Post-renal azotaemia due to urinary tract obstruction",
+   "Pre-renal azotaemia due to dehydration or haemorrhage",
+   "Intrinsic renal failure with glomerulonephritis"
+  ],
+  "correct": 2,
+  "exp": "The lecture states that the normal BUN/creatinine ratio is 10–20:1. A high ratio with a normal creatinine indicates pre-renal azotaemia (e.g. dehydration, haemorrhage, congestive heart failure). Post-renal azotaemia (A) produces a high ratio but also an elevated creatinine. Intrinsic renal failure (C) elevates both urea and creatinine, keeping the ratio near normal. Low protein intake (D) decreases urea, thereby lowering, not raising, the ratio.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "BUN/creatinine ratio and azotaemia classification",
+  "diff": "medium"
+ },
+ {
+  "q": "A 72-year-old woman has: albumin-adjusted calcium 1.76 mmol/L, phosphate 0.52 mmol/L, PTH 138 ng/L, ALP 763 U/L, and 25-hydroxyvitamin D 5 µg/L. Which interpretation is MOST consistent with these findings?",
+  "opts": [
+   "Chronic renal failure causing hypocalcaemia with raised phosphate and raised PTH",
+   "Primary hyperparathyroidism with hypercalcaemia and low phosphate",
+   "Hypoparathyroidism causing hypocalcaemia with hyperphosphataemia",
+   "Osteomalacia with secondary hyperparathyroidism due to vitamin D deficiency"
+  ],
+  "correct": 3,
+  "exp": "The lecture case study describes this exact constellation: low 25-OH vitamin D confirms osteomalacia; hypocalcaemia and hypophosphataemia with appropriately elevated PTH (secondary hyperparathyroidism) and raised ALP support prolonged calcium deficiency. Primary hyperparathyroidism (A) would produce hypercalcaemia. Hypoparathyroidism (C) causes raised phosphate, not low. Chronic renal failure (D) elevates phosphate, not lowers it.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Calcium homeostasis and hypocalcaemia investigation",
+  "diff": "hard"
+ },
+ {
+  "q": "In a patient with obstructive jaundice due to a common bile duct stone, which combination of liver function test results is MOST expected?",
+  "opts": [
+   "Elevated ALP of bony origin confirmed by simultaneously elevated GGT",
+   "Markedly elevated ALP with elevated GGT and predominantly elevated direct (conjugated) bilirubin",
+   "Predominantly elevated indirect (unconjugated) bilirubin with low ALP and normal GGT",
+   "Markedly elevated ALT and AST with mildly elevated ALP and normal GGT"
+  ],
+  "correct": 1,
+  "exp": "The lecture states ALP is the great marker for obstructive jaundice (up to 10 times normal) and GGT is highest in biliary obstruction; when ALP rises with GGT, this confirms hepatic origin. Obstruction impairs bilirubin excretion, raising conjugated (direct) bilirubin. Markedly elevated ALT/AST (A) characterises hepatocellular necrosis. Elevated unconjugated bilirubin (C) suggests haemolysis or impaired conjugation. Elevated ALP without GGT (D) would suggest bony origin.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Liver function tests in obstructive jaundice",
+  "diff": "medium"
+ },
+ {
+  "q": "Serum creatinine is preferred over urea for monitoring glomerular function in clinical practice. Which property of creatinine BEST justifies this preference according to the lecture?",
+  "opts": [
+   "Creatinine is synthesized exclusively by the liver, ensuring a constant production rate",
+   "Creatinine reflects glomerular function and its clearance is used to estimate GFR via a 24-hour urine comparison",
+   "Creatinine levels are unrelated to muscle mass and therefore constant across all patients",
+   "Creatinine rises measurably when renal function has deteriorated by more than 20%, making it an early marker"
+  ],
+  "correct": 1,
+  "exp": "The lecture states creatinine clearance compares creatinine in a 24-hour urine sample to blood creatinine to estimate GFR. When plasma creatinine rises, GFR falls, indicating renal damage. Creatinine is synthesized by liver, kidney, and pancreas (not exclusively liver — that option is wrong). It IS related to muscle mass. The lecture specifies creatinine is measurably increased when renal function has deteriorated MORE than 50%, not 20%.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Serum creatinine and GFR estimation",
+  "diff": "medium"
+ },
+ {
+  "q": "A diabetic patient's urine albumin excretion is 180 mg per 24 hours. How should this result be classified according to the lecture?",
+  "opts": [
+   "Microalbuminuria, indicating the earliest detectable abnormality of diabetic nephropathy",
+   "Normal, as it is below the 200 mg/24-hour threshold",
+   "Non-specific proteinuria detectable only by standard dipstick, not albumin-specific testing",
+   "Macroalbuminuria, indicating advanced diabetic nephropathy with declining GFR"
+  ],
+  "correct": 0,
+  "exp": "The lecture defines microalbuminuria as 30–300 mg/24 hours (or 20–200 µg/min), describing it as the earliest detectable abnormality. 180 mg/24 hours falls within this range. Normal is <30 mg/24 hours. Macroalbuminuria (C) requires >300 mg/24 hours. Standard dipstick detects proteinuria generally; microalbuminuria requires a more sensitive specific test.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Microalbuminuria and diabetic nephropathy",
+  "diff": "medium"
+ },
+ {
+  "q": "A patient is suspected of having a myocardial infarction. Serial cardiac troponin measurements are ordered. Which statement about troponin BEST reflects the lecture content?",
+  "opts": [
+   "Troponin C is the clinically measured isoform because it is cardiac-specific and inhibits the actin-myosin interaction",
+   "Troponin T binds actin and myosin directly, while Troponin I anchors the complex to tropomyosin",
+   "A high-sensitivity troponin assay can detect an acute rise within 4 hours of onset of ACS, and no rise after 12 hours suggests non-cardiac chest pain",
+   "CK-MB is preferred over troponin because it remains elevated for 2–4 weeks, allowing late diagnosis"
+  ],
+  "correct": 2,
+  "exp": "The lecture states that high-sensitivity troponin can detect an acute rise within 4 hours of ACS onset, and demonstration of no rise even after repeat testing at 12 hours is useful to establish non-cardiac chest pain. CK-MB (A) returns to baseline in 2–4 days, not weeks. The lecture states Troponin T binds the complex to tropomyosin, Troponin I inhibits actin-myosin binding, and Troponin C binds calcium (those options assign the roles incorrectly).",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Cardiac troponin and ACS diagnosis",
+  "diff": "hard"
+ },
+ {
+  "q": "Which of the following BEST describes the clinical utility of measuring Gamma-glutamyl transferase (GGT) alongside Alkaline phosphatase (ALP)?",
+  "opts": [
+   "GGT is specific to bone, so its rise alongside ALP confirms osteogenic disease such as Paget's disease",
+   "A raised ALP with a normal GGT confirms that the ALP elevation is of hepatic origin",
+   "GGT elevation alone, without ALP elevation, is diagnostic of hepatobiliary obstruction",
+   "A raised ALP with a raised GGT confirms that the ALP elevation is of hepatic rather than bony origin"
+  ],
+  "correct": 3,
+  "exp": "The lecture explicitly states 'ALP elevation with GGT confirms the hepatic origin of ALP.' GGT is NOT present in bone (the lecture states it is NOT in bone), so a normal GGT with raised ALP suggests bony origin (A reverses this logic). GGT being specific to bone (C) is incorrect; the lecture says it is absent from bone. GGT elevation alone (D) is not stated as diagnostic of obstruction; the highest levels are in obstructive jaundice but the specific clinical use described is to confirm ALP origin.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Role of GGT in liver function testing",
+  "diff": "medium"
+ },
+ {
+  "q": "A 50-year-old man with known cirrhosis presents with ascites. His plasma albumin is 18 g/L. Which statement about this finding BEST reflects the lecture?",
+  "opts": [
+   "Albumin levels are unreliable in liver disease because the normal adult ambulatory range is 6.4–8.3 g/dL",
+   "Hypoalbuminaemia in this context exclusively indicates loss of albumin through the kidneys into ascitic fluid",
+   "Hypoalbuminaemia reflects reduced hepatic synthetic capacity and correlates with the severity of liver functional impairment",
+   "Hypoalbuminaemia is specific to cirrhosis and would not be seen in nephrotic syndrome or protein-losing enteropathy"
+  ],
+  "correct": 2,
+  "exp": "The lecture states hypoalbuminaemia correlates with the severity of liver functional impairment because the liver is responsible for albumin synthesis (9–12 g/day). Another option incorrectly attributes it solely to renal loss. Another option confuses total protein range (6.4–8.3 g/dL) with albumin range (3.5–5.2 g/dL in adults). The lecture specifically notes that other causes of hypoalbuminaemia include nephrotic syndrome and protein-losing enteropathy, making that option incorrect.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Albumin as a marker of hepatic synthetic function",
+  "diff": "medium"
+ },
+ {
+  "q": "A 57-year-old man presents with acute epigastric pain, hypotension, and a plasma amylase of 2567 U/L. His albumin-adjusted calcium is 1.89 mmol/L. Which statement about this clinical scenario BEST reflects the lecture?",
+  "opts": [
+   "A plasma amylase of 2567 U/L is within the normal serum reference range of 28–100 U/L and does not require further investigation",
+   "Amylase is produced exclusively by the pancreas, and any elevation above the reference range is diagnostic of acute pancreatitis",
+   "Hypocalcaemia in pancreatitis is caused by excessive PTH secretion in response to the inflammatory state",
+   "The very high amylase confirms pancreatitis; hypocalcaemia, impaired renal function, and hyperglycaemia can all be associated complications"
+  ],
+  "correct": 3,
+  "exp": "The lecture case study describes this exact scenario: very high amylase supports acute pancreatitis (confirmed by CT), and the associated features include hypocalcaemia, impaired renal function, and hyperglycaemia. Amylase comes from both pancreatic acinar cells AND salivary glands, so it is not exclusive to the pancreas. The lecture does not attribute pancreatitis-associated hypocalcaemia to PTH hypersecretion (C). 2567 U/L is far above the normal 28–100 U/L reference range.",
+  "lecture": "FCP [008c] Intro to clinical chemistry laboratory test .pdf",
+  "topic": "Amylase and acute pancreatitis",
+  "diff": "hard"
+ },
+ {
+  "q": "A 45-year-old patient is scheduled for an elective abdominal surgery. The surgeon obtains written consent from the patient after explaining the procedure, risks, benefits, and alternatives. The patient signs voluntarily in the presence of a witness before the procedure. Which type of consent best describes this scenario?",
+  "opts": [
+   "Implied consent",
+   "Proxy consent",
+   "Blanket consent",
+   "Informed expressed written consent"
+  ],
+  "correct": 3,
+  "exp": "The scenario describes all validity criteria for informed/expressed written consent: it is written, obtained before the procedure, witnessed, and given voluntarily after full information is provided. Implied consent is non-verbal (e.g., rolling up a sleeve for a blood draw). Proxy consent is given by a surrogate for a patient unable to consent. Blanket consent is a general, non-specific form that does not meet validity requirements for informed consent.",
+  "lecture": "FCP [014] Introduction to the Case Of the Week.pdf",
+  "topic": "Medicolegal aspects of consent",
+  "diff": "medium"
+ },
+ {
+  "q": "During a structured clinical round, multiple specialists discuss a patient's plan of care with the goal of coordinating between different medical specialties. Which principle best characterises this Multidisciplinary Team (MDT) meeting according to the lecture?",
+  "opts": [
+   "It is primarily physician-centered, focusing on the treating doctor's preferences",
+   "It is patient-centered, aimed at developing and evaluating an integrated plan of medical care",
+   "It is restricted to surgical specialties and excludes allied health professionals",
+   "It replaces individual clinical reasoning by delegating all decisions to the group"
+  ],
+  "correct": 1,
+  "exp": "The lecture explicitly states that the MDT round is patient-centered, based on the needs of the patient, and is designed to develop and evaluate an integrated plan of medical care. It is not physician-centered or restricted to surgical specialties. Clinical reasoning is still required individually; the MDT coordinates rather than replaces it.",
+  "lecture": "FCP [014] Introduction to the Case Of the Week.pdf",
+  "topic": "Multidisciplinary Team approach",
+  "diff": "easy"
+ },
+ {
+  "q": "A junior doctor is constructing a differential diagnosis for a new patient. According to the clinical reasoning framework described in the lecture, which sequence of steps most accurately reflects the correct approach to forming a diagnosis?",
+  "opts": [
+   "Interact with patient, collect information → Generate hypothesis → Determine diagnosis → Determine treatment",
+   "Perform examination → Take history → Determine treatment → Generate hypothesis",
+   "Generate hypothesis → Collect information → Interact with patient → Determine diagnosis",
+   "Order investigations → Generate hypothesis → Take history → Determine treatment"
+  ],
+  "correct": 0,
+  "exp": "The lecture defines clinical reasoning as a process by which a therapist interacts with a patient, collects information, generates a hypothesis, determines a diagnosis, and then determines treatment — in that order. The other options invert or omit key steps (e.g., ordering investigations before history-taking, or generating a hypothesis before collecting information), which contradicts the structured approach described.",
+  "lecture": "FCP [014] Introduction to the Case Of the Week.pdf",
+  "topic": "Clinical reasoning and diagnosis formation",
+  "diff": "medium"
+ },
+ {
+  "q": "A 25-year-old male presents with fatigue. His CBC shows Hb 10 g/dl, MCV 68 fL, and low serum ferritin. Which type of anaemia does this best represent?",
+  "opts": [
+   "Macrocytic anaemia due to vitamin B12 deficiency",
+   "Normocytic anaemia due to renal failure",
+   "Microcytic anaemia due to iron deficiency",
+   "Microcytic anaemia due to vitamin K deficiency"
+  ],
+  "correct": 2,
+  "exp": "MCV of 68 fL is below the normal range of 80-99 fL (microcytic), and low ferritin confirms iron deficiency as the cause. Normocytic anaemia has a normal MCV and is associated with renal failure. Macrocytic anaemia has a high MCV and is caused by B12/folate deficiency. Vitamin K deficiency affects coagulation, not red cell size.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "Anaemia classification and causes",
+  "diff": "easy"
+ },
+ {
+  "q": "Which anticoagulant is the preferred choice for blood sample collection when performing coagulation tests such as prothrombin time (PT) and partial thromboplastin time (PTT), and why?",
+  "opts": [
+   "EDTA, because it preserves platelet morphology best",
+   "Sodium citrate, because factor V is relatively stable in citrated blood",
+   "Heparin, because it inhibits thrombin directly",
+   "EDTA, because it strongly and irreversibly chelates calcium ions"
+  ],
+  "correct": 1,
+  "exp": "The lecture states that sodium citrate is the anticoagulant of choice for PT and PTT because factor V is relatively stable in citrated blood. EDTA strongly and irreversibly chelates calcium and is used for CBC collection. Heparin is not described as the anticoagulant of choice for coagulation tubes in the lecture.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "Sample collection and anticoagulants",
+  "diff": "medium"
+ },
+ {
+  "q": "A patient's peripheral blood film shows an increase in band cells and myelocytes. This finding is most consistent with which of the following?",
+  "opts": [
+   "Viral lymphocytosis",
+   "Neutrophilia with a left shift in severe bacterial infection",
+   "Eosinophilia due to parasitic infection",
+   "Thrombocytopenia due to bone marrow failure"
+  ],
+  "correct": 1,
+  "exp": "The lecture defines a 'left shift' as an increase in immature leukocytes in peripheral blood, particularly neutrophil band cells, seen in severe bacterial infections. Viral infections cause lymphocytosis; parasitic infections cause eosinophilia; bone marrow failure causes thrombocytopenia, not band cells.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "Leucocytosis and left shift",
+  "diff": "medium"
+ },
+ {
+  "q": "An ESR result of 120 mm/hour is most likely to be associated with which of the following conditions?",
+  "opts": [
+   "Hypofibrinogenaemia",
+   "Sickle cell disease",
+   "Polycythemia",
+   "Multiple myeloma"
+  ],
+  "correct": 3,
+  "exp": "The lecture states that ESR >100 mm/hour is seen in multiple myeloma, rheumatic fever, SLE, and active TB. Polycythemia, sickle cell disease, and hypofibrinogenaemia are listed as causes of a LOW ESR.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "Erythrocyte sedimentation rate (ESR)",
+  "diff": "medium"
+ },
+ {
+  "q": "Fresh Frozen Plasma (FFP) must be given within 1 hour of thawing. Which of the following best explains this requirement?",
+  "opts": [
+   "Coagulation factors degenerate rapidly after thawing",
+   "ABO incompatibility reactions increase after 1 hour",
+   "Bacterial proliferation begins immediately once thawed",
+   "Platelet aggregation is activated at room temperature"
+  ],
+  "correct": 0,
+  "exp": "The lecture states that FFP must be given ASAP within 1 hour of thawing, otherwise coagulation factors degenerate. Bacterial infection risk relates to platelet storage (shelf life 7 days), not FFP. Platelet aggregation and ABO incompatibility are not the stated reasons.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "Blood transfusion components",
+  "diff": "medium"
+ },
+ {
+  "q": "A patient on warfarin therapy has a prolonged prothrombin time (PT). The INR is reported instead of raw seconds. What is the primary reason for using INR over reporting PT in seconds alone?",
+  "opts": [
+   "INR uses ISI to standardise results regardless of thromboplastin type used",
+   "INR directly measures the activity of factor VII alone",
+   "INR corrects for patient age and sex differences in coagulation",
+   "INR eliminates the need for sodium citrate as the anticoagulant"
+  ],
+  "correct": 0,
+  "exp": "The lecture explains that lack of standardisation of thromboplastin origin makes raw PT seconds unreliable across laboratories. The ISI assesses thromboplastin sensitivity, and INR = (PT patient / mean normal PT)^ISI, allowing meaningful comparison regardless of thromboplastin type. INR does not correct for age/sex or measure factor VII specifically.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "Prothrombin time and INR",
+  "diff": "hard"
+ },
+ {
+  "q": "In a patient with suspected disseminated intravascular coagulation (DIC), which combination of laboratory findings would best support the diagnosis?",
+  "opts": [
+   "Shortened APTT and PT, increased fibrinogen, decreased D-dimers, increased platelets",
+   "Prolonged TT only, increased fibrinogen, normal platelet count, normal D-dimers",
+   "Prolonged APTT and PT, decreased fibrinogen, increased D-dimers, decreased platelets",
+   "Normal APTT and PT, decreased D-dimers, increased platelets, normal fibrinogen"
+  ],
+  "correct": 2,
+  "exp": "The lecture explicitly lists DIC laboratory abnormalities as prolonged APTT and PT/INR, decreased platelet count, decreased fibrinogen, and increased fibrin degradation products including D-dimers. The other options contradict these findings.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "DIC laboratory findings",
+  "diff": "hard"
+ },
+ {
+  "q": "Vitamin K is required for the synthesis of which set of coagulation factors?",
+  "opts": [
+   "Factors I, V, VIII, and XIII",
+   "Factors XI, XII, and XIII",
+   "Factors II, VII, IX, and X",
+   "Factors V, VIII, XI, and XII"
+  ],
+  "correct": 2,
+  "exp": "The lecture states that vitamin K is an essential cofactor for carboxylation of glutamic acid residues in inactive precursors of factors II, VII, IX, and X (as well as Proteins C and S). Factors I, V, VIII, XI, XII, and XIII are not vitamin K-dependent.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "Vitamin K and coagulation",
+  "diff": "easy"
+ },
+ {
+  "q": "A 78-year-old male weighing 133 kg was prescribed dalteparin 5000 units subcutaneously once daily after major surgery. He subsequently developed bilateral DVT and pulmonary embolism. What was the most likely reason for prophylaxis failure in this patient?",
+  "opts": [
+   "LMWH should not be used post-operatively; UFH is preferred",
+   "The dose of dalteparin was inadequate for his body weight",
+   "Antiembolism stockings should have been used instead of LMWH",
+   "Dalteparin is contraindicated in patients over 70 years of age"
+  ],
+  "correct": 1,
+  "exp": "The case study in the lecture explicitly states that the dose of dalteparin was inadequate for his body weight. UCLH guidelines indicate that for weight 100-149 kg, dalteparin 5000 units TWICE daily should be considered. There is no age contraindication stated, and LMWH is described as at least as effective as UFH.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "VTE prophylaxis and case study",
+  "diff": "medium"
+ },
+ {
+  "q": "The activated partial thromboplastin time (APTT) is prolonged in all of the following conditions EXCEPT:",
+  "opts": [
+   "Haemophilia A (factor VIII deficiency)",
+   "Heparin therapy",
+   "Isolated factor VII deficiency",
+   "Disseminated intravascular coagulation"
+  ],
+  "correct": 2,
+  "exp": "The lecture states that APTT tests the intrinsic pathway (factors XII, XI, IX, VIII, X, V, II, I). Factor VII belongs exclusively to the extrinsic pathway and is tested by the PT, not the APTT. Haemophilia A (factor VIII), heparin, and DIC all prolong the APTT as listed in the lecture.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "APTT and coagulation pathways",
+  "diff": "hard"
+ },
+ {
+  "q": "Platelets are stored at 22°C with constant agitation. Their short shelf life of only 7 days is primarily because of which risk?",
+  "opts": [
+   "Risk of ABO incompatibility reactions",
+   "Degeneration of coagulation factors at room temperature",
+   "Loss of platelet aggregation ability due to agitation",
+   "Risk of bacterial infection"
+  ],
+  "correct": 3,
+  "exp": "The lecture explicitly states that the shelf life of platelets is 7 days only due to the risk of bacterial infection. ABO compatibility must be known but is not the reason for the short shelf life. Coagulation factor degeneration applies to FFP, not platelets. Agitation is required to maintain platelet viability, not a cause of loss.",
+  "lecture": "FCP [015] Introduction to haematology.pdf",
+  "topic": "Blood transfusion components - platelets",
+  "diff": "easy"
+ },
+ {
+  "q": "During a mass casualty incident, a non-walking casualty is found breathing after airway opening, with a respiratory rate of 24 breaths per minute and a capillary refill time of 1.8 seconds. Using the Triage Sieve algorithm, what priority should be assigned?",
+  "opts": [
+   "Priority 1 (Immediate)",
+   "Priority 3 (Delayed)",
+   "Priority 2 (Urgent)",
+   "Dead"
+  ],
+  "correct": 2,
+  "exp": "According to the Triage Sieve flowchart: the casualty is NOT walking, IS breathing after airway opening, has a respiratory rate of 10-29 (scores as normal), and a capillary refill time under 2 seconds — all of which direct to Priority 2 (Urgent). Priority 1 is assigned when respiratory rate is under 10 or over 29, OR capillary refill is 2 seconds or more. Priority 3 is for walking casualties. Dead is assigned when breathing does not resume after airway opening.",
+  "lecture": "FCP [024] Triage.pdf",
+  "topic": "Triage Sieve Algorithm",
+  "diff": "medium"
+ },
+ {
+  "q": "A casualty in a mass casualty incident has a respiratory rate of 8 breaths/min, a systolic blood pressure of 80 mmHg, and a Glasgow Coma Scale of 10. What is the Triage Revised Trauma Score (TRTS) total?",
+  "opts": [
+   "8",
+   "7",
+   "5",
+   "6"
+  ],
+  "correct": 0,
+  "exp": "Using the TRTS scoring table from the lecture: Respiratory rate 6-9 = 2 points; Systolic BP 76-89 = 3 points; GCS 9-12 = 3 points. Total TRTS = 2 + 3 + 3 = 8. Another option (5) would result from underscoring BP or GCS. Another option (6) and Another option (7) result from miscalculating individual component scores.",
+  "lecture": "FCP [024] Triage.pdf",
+  "topic": "Triage Sort / TRTS Scoring",
+  "diff": "hard"
+ },
+ {
+  "q": "A casualty's injuries are so severe that providing treatment would compromise the care of other survivors, yet the casualty is still alive. According to the triage priority system described in the lecture, which priority best applies?",
+  "opts": [
+   "Priority 4 (Expectant) — injuries so severe that treatment would compromise care of others",
+   "Priority 3 (Delayed) — treatment can be safely delayed beyond 4 hours",
+   "Priority 1 (Immediate) — requires life-saving intervention now",
+   "Priority 2 (Urgent) — requires intervention within 2-4 hours"
+  ],
+  "correct": 0,
+  "exp": "Priority 4 (Expectant) is defined in the lecture as casualties whose injuries are either unsurvivable OR so severe that their treatment would divert resources and compromise care of other casualties. This is distinct from Priority 1, which covers casualties needing immediate life-saving intervention with a reasonable chance of survival; Priority 2 for those needing surgery within 2-4 hours; and Priority 3 for those whose treatment can be safely delayed beyond 4 hours.",
+  "lecture": "FCP [024] Triage.pdf",
+  "topic": "Triage Priorities",
+  "diff": "medium"
+ },
+ {
+  "q": "During histological processing, xylene is used as an intermediate solvent between ethanol and paraffin wax. What property of xylene makes it essential at this stage?",
+  "opts": [
+   "It dehydrates the tissue by removing free and bound water at increasing concentrations",
+   "It solidifies at 20°C and provides a rigid support matrix for section cutting",
+   "It stains the tissue so that structures become visible under the microscope",
+   "It is fully miscible with both ethanol and paraffin wax, allowing displacement of ethanol before wax infiltration"
+  ],
+  "correct": 3,
+  "exp": "Xylene (the clearing agent) is used because ethanol and paraffin wax are largely immiscible. Xylene is fully miscible with both, so it first displaces ethanol from the tissue and is then itself displaced by molten paraffin wax. Another option describes dehydration with ethanol series, not xylene. Another option describes paraffin wax properties. Another option describes staining, not clearing.",
+  "lecture": "FCP [034] An Introduction to Anatomical Pathology 25-26.pdf",
+  "topic": "Histological Processing – Clearing",
+  "diff": "medium"
+ },
+ {
+  "q": "In the Nottingham grading system for tumours, which combination of grade and expected prognosis is correct?",
+  "opts": [
+   "Grade 1: Poorly differentiated – poor prognosis",
+   "Grade 3: Poorly differentiated – poor prognosis",
+   "Grade 3: Moderately differentiated – intermediate prognosis",
+   "Grade 2: Well-differentiated – good prognosis"
+  ],
+  "correct": 1,
+  "exp": "According to the lecture, Grade 3 is poorly differentiated and carries a poor prognosis. Grade 1 is well-differentiated with a good prognosis, and Grade 2 is moderately differentiated. Two of the other options reverse the grade-differentiation relationship, and Another option misclassifies Grade 3 as moderately differentiated.",
+  "lecture": "FCP [034] An Introduction to Anatomical Pathology 25-26.pdf",
+  "topic": "Histological Grading",
+  "diff": "easy"
+ },
+ {
+  "q": "A pathologist receives a post-surgical breast specimen and notes that cancer cells are present at the outer edge of the removed tissue. How should the surgical margins be reported, and what does this finding imply?",
+  "opts": [
+   "Positive margins; cancer cells are found at the edge of the removed material",
+   "Clear margins; the tumour has been completely excised",
+   "Free margins; the tumour did not reach the resection boundary",
+   "Negative margins; no cancer cells remain at the surgical edge"
+  ],
+  "correct": 0,
+  "exp": "The lecture states that positive margins mean cancer cells are found at the edge of the material removed, implying incomplete excision. Negative, clear, and free margins all mean no cancer cells are found at the outer edge, which is the opposite of the described finding.",
+  "lecture": "FCP [034] An Introduction to Anatomical Pathology 25-26.pdf",
+  "topic": "Completeness of Excision",
+  "diff": "easy"
+ },
+ {
+  "q": "A researcher needs to identify a specific protein expressed by tumour cells in a formalin-fixed paraffin-embedded tissue section, visualisable under a standard light microscope. Which technique is most appropriate?",
+  "opts": [
+   "Haematoxylin and eosin staining, because it reveals underlying tissue structures",
+   "Immunohistochemistry, because antibodies labelled with a red or brown marker detect the specific target protein",
+   "Electron microscopy, because it provides the highest resolving power for protein identification",
+   "Immunofluorescence, because fluorescent dye-conjugated antibodies are viewed under light microscopy"
+  ],
+  "correct": 1,
+  "exp": "The lecture describes IHC as using antibodies labelled with a red or brown counterstain to visualise specific proteins under light microscopy. Immunofluorescence uses fluorescent dyes that require a fluorescence microscope, not standard light microscopy. H&E does not identify specific proteins. Electron microscopy is expensive, technically difficult, and the lecture notes most tumours look the same under it.",
+  "lecture": "FCP [034] An Introduction to Anatomical Pathology 25-26.pdf",
+  "topic": "Immunohistochemistry",
+  "diff": "medium"
+ },
+ {
+  "q": "A coroner orders an autopsy after a person is found dead under suspicious circumstances. A family member asks why family consent was not required. Which type of autopsy has been ordered, and why is consent not needed?",
+  "opts": [
+   "Medico-legal (forensic) autopsy; it is ordered by the coroner to determine the cause of death in suspicious or violent cases",
+   "Clinical autopsy; it is performed to confirm a known medical diagnosis and requires family consent",
+   "Virtual autopsy; it uses MRI and CT imaging and is non-invasive",
+   "Anatomical autopsy; it is performed by anatomy students for study purposes only"
+  ],
+  "correct": 0,
+  "exp": "The lecture states that medico-legal (forensic/coroner's) autopsies are ordered by the coroner for suspicious or violent cases and do not require family consent. Clinical autopsies do require family consent. Anatomical autopsies are for student study. Virtual autopsies use imaging only, which does not fit a coroner-ordered scenario requiring full examination.",
+  "lecture": "FCP [034] An Introduction to Anatomical Pathology 25-26.pdf",
+  "topic": "Types of Autopsy",
+  "diff": "medium"
+ },
+ {
+  "q": "During dehydration in histological processing, tissue is immersed in a series of ethanol solutions of increasing concentrations rather than placed directly into 100% ethanol. What is the primary reason for using this graduated series?",
+  "opts": [
+   "To allow xylene to penetrate the tissue progressively before paraffin wax infiltration",
+   "To gradually replace tissue water with alcohol and avoid excessive distortion of the tissues",
+   "To stain intracellular structures sequentially with each ethanol concentration",
+   "To ensure the tissue cassette reaches the correct temperature before embedding"
+  ],
+  "correct": 1,
+  "exp": "The lecture explicitly states that a series of increasing ethanol concentrations is used to ensure water in the tissue is gradually replaced by alcohol and to avoid excessive distortion of the tissues. Xylene comes after dehydration (Another option) as a clearing agent. Ethanol does not stain tissues (Another option). Temperature management relates to wax embedding, not dehydration (Another option).",
+  "lecture": "FCP [034] An Introduction to Anatomical Pathology 25-26.pdf",
+  "topic": "Histological Processing – Dehydration",
+  "diff": "hard"
+ },
+ {
+  "q": "According to CAPMAS 2018 data, what percentage of Egypt's population was over 60 years old, and what was the projected figure for 2026?",
+  "opts": [
+   "6.9% in 2018, projected to reach 10.9% in 2026",
+   "6.9% in 2018, projected to reach 9.1% in 2026",
+   "4.6% in 2018, projected to reach 6.9% in 2026",
+   "9.655% in 2018, projected to reach 10.9% in 2026"
+  ],
+  "correct": 0,
+  "exp": "The lecture states clearly that 6.9% of Egypt's population was over 60 in 2018 and this was projected to reach 10.9% in 2026. Another option confuses the 60-69 age sub-group percentage (4.6%) with the total over-60 figure. Another option gives the wrong projected value. Another option confuses Cairo's population in millions (9.655 million) with a percentage.",
+  "lecture": "FCP [035] Later Life in Egypt .pdf",
+  "topic": "Demographics of elderly in Egypt",
+  "diff": "easy"
+ },
+ {
+  "q": "A geriatric medicine department wishes to understand the leading causes of death among the elderly in Egypt. Which combination of conditions accounts for approximately 75% of total deaths?",
+  "opts": [
+   "Cancer and diabetes mellitus",
+   "Coronary heart diseases and cerebrovascular diseases",
+   "Cerebrovascular diseases and cancer",
+   "Coronary heart diseases and cancer"
+  ],
+  "correct": 3,
+  "exp": "The lecture explicitly states that coronary heart diseases and cancer together account for about 75% of total deaths in the elderly. Cerebrovascular diseases are listed separately as the second leading cause after this pair. Diabetes mellitus is listed as a chronic morbidity but not among the top causes of death.",
+  "lecture": "FCP [035] Later Life in Egypt .pdf",
+  "topic": "Geriatric Morbidity and Mortality",
+  "diff": "medium"
+ },
+ {
+  "q": "An elderly Egyptian man with no family caregivers has mild physical restrictions that prevent fully independent living but does not require inpatient care. According to the community care services described in the lecture, which type of facility is MOST appropriate for him?",
+  "opts": [
+   "Geriatric social clubs, which offer periodic medical screening and recreational facilities",
+   "Home care services, regulated by NGOs for lonely, severely ill and disabled elderly",
+   "Residential elderly homes, whose numbers increased from 115 in 2007 to 176 in 2015",
+   "Day care centers, designed for elderly with physical or mental restrictions impeding independent living"
+  ],
+  "correct": 3,
+  "exp": "The lecture specifically states that day care centers were constructed for elderly who have physical or mental restrictions impeding independent living, matching this patient's situation. Geriatric social clubs focus on screening and recreation for more independent members. Home care is targeted at the lonely, severely ill, or disabled. Elderly homes represent full residential placement, which is more than what a mildly restricted person requires.",
+  "lecture": "FCP [035] Later Life in Egypt .pdf",
+  "topic": "Community Care and Support",
+  "diff": "hard"
+ },
+ {
+  "q": "A urine sample is collected from a catheterized adult patient. Which technique is the correct method for obtaining this sample?",
+  "opts": [
+   "Collect a clean-catch midstream specimen after thorough perineal cleaning",
+   "Aspirate urine directly from the collection bag using a syringe",
+   "Place an adhesive collection bag over the urethral meatus and wait for voiding",
+   "Clean the built-in sampling port with 70% alcohol and aspirate with a needle and syringe"
+  ],
+  "correct": 3,
+  "exp": "The lecture states that for catheterized patients, the drainage tube's built-in sampling port should be cleaned vigorously with 70% alcohol and urine aspirated with a needle and syringe. Sampling from the collection bag is explicitly stated as never acceptable. Clean-catch midstream and adhesive bags are techniques for non-catheterized adults and neonates/infants, respectively.",
+  "lecture": "FCP [050] (a) Introduction to clinical Microbiology 25-26.pdf",
+  "topic": "Urine sample collection",
+  "diff": "medium"
+ },
+ {
+  "q": "A freshly voided urine sample is sent for culture. The laboratory reports 10^5 colonies per mL using a standard calibrated bacteriological loop. Which interpretation is most appropriate?",
+  "opts": [
+   "The count meets the threshold for significant bacteriuria indicating a likely UTI",
+   "The count is borderline and must be repeated before any conclusion can be drawn",
+   "The count represents contamination from perineal flora",
+   "The count is within the normal range and indicates no urinary tract infection"
+  ],
+  "correct": 0,
+  "exp": "The lecture defines significant bacteriuria as 10^5 (100,000) colonies or more per mL using a standard calibrated bacteriological loop, which is diagnostic of a urinary tract infection. Values below this threshold are more likely to reflect contamination. The result described exactly meets this threshold and is therefore significant.",
+  "lecture": "FCP [050] (a) Introduction to clinical Microbiology 25-26.pdf",
+  "topic": "Significant bacteriuria",
+  "diff": "easy"
+ },
+ {
+  "q": "A Gram-stained CSF film from a patient with features of bacterial meningitis shows Gram-negative cocci within pus cells. Which organism does this finding most likely indicate?",
+  "opts": [
+   "Neisseria meningitidis (Meningococci)",
+   "Mycobacterium tuberculosis",
+   "Staphylococcus aureus",
+   "Streptococcus pneumoniae (Pneumococci)"
+  ],
+  "correct": 0,
+  "exp": "The lecture explicitly states that Gram-negative cocci within pus cells in CSF correspond to Meningococci (Neisseria meningitidis). Pneumococci appear as Gram-positive cocci in pairs that are capsulated. Mycobacterium tuberculosis requires ZN staining and appears as acid-fast bacilli. Staphylococcus aureus is Gram-positive.",
+  "lecture": "FCP [050] (a) Introduction to clinical Microbiology 25-26.pdf",
+  "topic": "Direct microscopic examination of CSF",
+  "diff": "medium"
+ },
+ {
+  "q": "A patient requires blood cultures for suspected sepsis. According to standard technique, 5–10 mL of blood is inoculated into a broth bottle. What is the correct ratio of blood volume to broth medium volume used in this technique?",
+  "opts": [
+   "10–20 mL blood added to 10–20 mL broth (1:1 ratio)",
+   "1–2 mL blood added to 50–100 mL broth (approximately 1:50 ratio)",
+   "5–10 mL blood added to 50–100 mL broth (approximately 1:10 ratio)",
+   "Equal volumes of blood and broth (1:1 ratio)"
+  ],
+  "correct": 2,
+  "exp": "The lecture describes the blood culture technique as adding 5–10 mL of blood to 50–100 mL of fluid medium (broth), giving approximately a 1:10 dilution ratio. This dilution is important to reduce the antibacterial effect of blood components. The other ratios are not mentioned in the lecture and do not reflect standard practice as taught.",
+  "lecture": "FCP [050] (a) Introduction to clinical Microbiology 25-26.pdf",
+  "topic": "Blood culture technique",
+  "diff": "medium"
+ },
+ {
+  "q": "A physician suspects pulmonary tuberculosis in a patient and orders sputum examination. Which of the following pre-analytical practices is most important for optimising TB detection in sputum?",
+  "opts": [
+   "Collect a nasopharyngeal swab on three successive days for ZN staining",
+   "Collect three morning sputum samples on three successive days for ZN staining",
+   "Collect sputum immediately after meals to maximise sputum volume for ZN staining",
+   "Collect a single large-volume sputum sample on one morning for ZN staining"
+  ],
+  "correct": 1,
+  "exp": "The lecture specifies that three morning sputum samples collected on three successive days are required for TB diagnosis using Ziehl-Neelsen (ZN) examination. A single sample is insufficient due to intermittent shedding of acid-fast bacilli. Nasopharyngeal swabs are used for respiratory infections such as COVID-19, not TB. Collecting post-meal samples is not mentioned and risks saliva contamination.",
+  "lecture": "FCP [050] (a) Introduction to clinical Microbiology 25-26.pdf",
+  "topic": "Sputum sample collection for TB",
+  "diff": "medium"
+ },
+ {
+  "q": "Mr. Ahmed, a 55-year-old diabetic man, has a sputum culture showing pus cells 10-12/HPF and growth of Acinetobacter. Which of the following BEST explains why bacterial chest infection is confirmed in this case but NOT in Case I (Mr. Mohsen)?",
+  "opts": [
+   "Mr. Ahmed has a higher fever and longer symptom duration, which alone confirm bacterial infection regardless of lab findings",
+   "Acinetobacter is more virulent than other organisms, so its presence alone without pus cells would still confirm bacterial infection",
+   "Mr. Mohsen's direct film showed pus cells below 5/HPF, which is still sufficient to diagnose infection if culture is positive",
+   "Mr. Ahmed's report shows both pus cells exceeding 5/HPF and positive bacterial culture, whereas Mr. Mohsen had no pus cells and no growth"
+  ],
+  "correct": 3,
+  "exp": "Bacterial chest infection requires both inflammatory evidence (pus cells >5/HPF) and a positive culture. Mr. Ahmed meets both criteria (pus cells 10-12/HPF and Acinetobacter growth). Mr. Mohsen had no pus cells and no culture growth, giving a final interpretation of no bacterial chest infection. Another option is incorrect because clinical features alone are not used to confirm infection in the post-analytical stage described. Another option is wrong because Mr. Mohsen had NO pus cells, not just low ones. Another option is incorrect because the lecture emphasises both criteria together, not organism virulence alone.",
+  "lecture": "FCP [050] (b) Introduction to clinical microbiology QAs 25-26.pdf",
+  "topic": "Interpretation of sputum culture and sensitivity",
+  "diff": "medium"
+ },
+ {
+  "q": "Mrs. Mona is a 28-year-old pregnant woman with painful micturition. Her urine direct film shows pus cells 12-15/HPF but culture shows no growth. What is the MOST appropriate final interpretation?",
+  "opts": [
+   "Urinary tract infection confirmed because pus cells exceed 5/HPF",
+   "No urinary tract infection; pus cells may be due to vaginitis or improper mid-stream collection",
+   "No urinary tract infection; pus cells below 10/HPF are always insignificant in pregnant women",
+   "Urinary tract infection likely caused by a fastidious organism that fails to grow on standard culture media"
+  ],
+  "correct": 1,
+  "exp": "According to the lecture, despite pus cells >5/HPF, the absence of bacterial growth means no bacterial UTI is diagnosed. The elevated pus cells may be explained by vaginitis or failure to collect a proper mid-stream urine sample. Another option is incorrect because positive culture is also required for a UTI diagnosis alongside pus cells. Another option is not supported by the lecture material. Another option is incorrect because the lecture does not set a higher threshold for pregnant women; the explanation given is vaginitis or collection error, not a numeric threshold adjustment.",
+  "lecture": "FCP [050] (b) Introduction to clinical microbiology QAs 25-26.pdf",
+  "topic": "Interpretation of urine culture and sensitivity",
+  "diff": "medium"
+ },
+ {
+  "q": "Mrs. Soha has a urine culture showing only 3-4 pus cells/HPF but growth of E. coli. Her antibiotics of choice include nitrofurantoin, tigecycline, and imipenem. Mr. Salem has CSF with 0-1 pus cells/HPF and no culture growth. Which statement BEST compares these two cases regarding the role of culture results in diagnosis?",
+  "opts": [
+   "Mrs. Soha is diagnosed with UTI based on positive E. coli culture even though pus cells are below 5/HPF, while Mr. Salem has no bacterial meningitis because both pus cells and culture are negative",
+   "Mr. Salem is diagnosed with viral meningitis because pus cells are absent, whereas Mrs. Soha's low pus cell count means her result is inconclusive",
+   "Both cases confirm infection because any bacterial growth, regardless of pus cell count, is always diagnostic",
+   "Mrs. Soha's diagnosis relies solely on pus cells exceeding the threshold, and the E. coli culture result is used only to select antibiotics"
+  ],
+  "correct": 0,
+  "exp": "The lecture shows that Mrs. Soha's UTI is confirmed by positive E. coli culture (the causative organism), and appropriate antibiotics are selected, even though pus cells are only 3-4/HPF (below the >5/HPF threshold). Mr. Salem has 0-1 pus cells/HPF and no culture growth, leading to the conclusion of no bacterial meningitis. Another option is incorrect because a single positive culture in isolation is not always automatically diagnostic across all body sites based on the lecture cases. Another option is wrong because the lecture does not diagnose Mr. Salem with viral meningitis; it simply rules out bacterial meningitis. Another option is incorrect because pus cells in Mrs. Soha are below 5/HPF, so diagnosis cannot rely solely on them.",
+  "lecture": "FCP [050] (b) Introduction to clinical microbiology QAs 25-26.pdf",
+  "topic": "Comparison of urine and CSF culture interpretation",
+  "diff": "hard"
+ },
+ {
+  "q": "A clinical fellow prescribes HeliClear® (lansoprazole, amoxicillin, clarithromycin) to a patient who subsequently collapses and develops facial swelling requiring adrenaline and IV fluid resuscitation. Which factor MOST directly contributed to this adverse outcome?",
+  "opts": [
+   "Failure to prescribe the correct PPI dose for Helicobacter eradication",
+   "Use of clarithromycin without checking for QT-prolonging drug interactions",
+   "Lack of awareness that a combination branded product contained amoxicillin in a patient with a penicillin allergy",
+   "Prescribing by brand name instead of generic name leading to a dispensing error"
+  ],
+  "correct": 2,
+  "exp": "The lecture explicitly states the problem was awareness of medicines and their components, especially for combination products, in a patient with a known allergy. The anaphylactic reaction (facial swelling, collapse requiring adrenaline) is consistent with a penicillin allergy to the amoxicillin component of HeliClear®. Another option is related but the lecture emphasises the allergy/component awareness issue as the core problem, not merely brand vs. generic naming. Two of the other options are not mentioned as contributing factors in this case.",
+  "lecture": "FCP [VM 045] Safe prescribing and the role of the pharmacist (Updated Lecture).pdf",
+  "topic": "Prescribing errors and allergy documentation",
+  "diff": "medium"
+ },
+ {
+  "q": "A doctor writes a prescription for 6IU of insulin for a patient. The pharmacist misreads this and dispenses a dose of 61 units. According to safe prescribing guidelines discussed in the lecture, which practice would BEST have prevented this error?",
+  "opts": [
+   "Avoiding decimal points by converting to the nearest whole milligram",
+   "Writing the dose in both numbers and words, as required for controlled drugs",
+   "Writing the word 'units' in full rather than using the abbreviation 'IU'",
+   "Using a pre-printed insulin prescription chart instead of a handwritten prescription"
+  ],
+  "correct": 2,
+  "exp": "The lecture directly cites this exact case (PharmJ 2001;267:193) and states that abbreviation of 'units' to 'IU' resulted in 10-fold overdoses when '6IU' was misread as '61 units'. The specific recommendation given is to write the word 'units' in full. Another option relates to decimal point errors (a different case involving digoxin). Another option applies specifically to controlled drug prescriptions. Another option is not stated as the preventive measure for this scenario.",
+  "lecture": "FCP [VM 045] Safe prescribing and the role of the pharmacist (Updated Lecture).pdf",
+  "topic": "Dose units and prescribing errors",
+  "diff": "medium"
+ },
+ {
+  "q": "A junior doctor is writing a prescription for morphine sulphate 10 mg tablets (Sevredol) for a patient to take home. Which requirement applies to a controlled drug prescription that does NOT apply to a standard TTA prescription?",
+  "opts": [
+   "The drug must be prescribed by its generic name rather than its brand name",
+   "The duration of treatment and dosage form must be stated on the prescription",
+   "The prescription must include the patient's name, drug name, dose, route, frequency, and the doctor's signature",
+   "The total number of tablets must be written in both words and figures, and all details must be in the doctor's own handwriting"
+  ],
+  "correct": 3,
+  "exp": "The lecture specifies that controlled drug prescriptions have two unique requirements distinguishing them from standard prescriptions: (1) the total number of units must be written in both words AND figures (e.g., 56 and 'fifty-six'), and (2) ALL details must be in the doctor's own handwriting — the pharmacy cannot make changes. Two of the other options describe requirements common to all TTA prescriptions. Another option contradicts the lecture, which shows that the preparation for CDs should be defined including the brand name (e.g., Sevredol).",
+  "lecture": "FCP [VM 045] Safe prescribing and the role of the pharmacist (Updated Lecture).pdf",
+  "topic": "Controlled drug prescribing",
+  "diff": "hard"
+ },
+ {
+  "q": "A dying cancer patient is started on high-dose morphine to control severe pain. The treating physician is aware that this dose may suppress the respiratory drive and hasten death. According to the ethical principle discussed in the lecture, which concept BEST justifies this clinical decision?",
+  "opts": [
+   "Justice, because scarce opioid resources must be fairly distributed to those who need them most",
+   "Beneficence alone, because the primary intention is to cure the disease",
+   "Double effect, because an action intended to do good may have a foreseeable harmful side effect",
+   "Non-maleficence alone, because the physician must avoid all harm regardless of intent"
+  ],
+  "correct": 2,
+  "exp": "The lecture explicitly uses high-dose morphine in a dying patient as the example of the 'double effect' principle under non-maleficence: the intended good (pain relief) co-exists with a foreseeable harmful side effect (respiratory suppression hastening death). Beneficence alone does not capture the harmful component, non-maleficence alone would prohibit the act, and justice concerns resource distribution rather than this dilemma.",
+  "lecture": "FCP [VM 120] Everyday Ethics; Medical ethics and Medico-legal aspects (Lecture).pdf",
+  "topic": "Non-maleficence / Double Effect",
+  "diff": "medium"
+ },
+ {
+  "q": "According to the WMA Declaration on the Rights of the Patient as cited in the lecture, when a particular treatment is in limited supply and a choice must be made between potential patients, on what basis MUST the selection be made?",
+  "opts": [
+   "Medical criteria only, without discrimination",
+   "Restorative principles, favouring historically disadvantaged groups",
+   "Utilitarian principles, maximising total benefit to society",
+   "Market principles, favouring patients with greater ability and willingness to pay"
+  ],
+  "correct": 0,
+  "exp": "The lecture quotes the WMA Declaration directly: 'That choice must be based on medical criteria and made without discrimination.' The other options (libertarian/market, restorative, and utilitarian approaches) are listed as alternative resource-allocation philosophies but are NOT what the WMA Declaration mandates.",
+  "lecture": "FCP [VM 120] Everyday Ethics; Medical ethics and Medico-legal aspects (Lecture).pdf",
+  "topic": "Justice / Resource Allocation",
+  "diff": "medium"
+ },
+ {
+  "q": "A medical student is reviewing laboratory results on the hospital computer system and notices an interesting case. The patient is not under the student's care. According to the lecture's guidance on patient confidentiality, which action is MOST appropriate?",
+  "opts": [
+   "Access the records but ensure all printed notes are shredded after review",
+   "View the records briefly for educational purposes, as learning is a legitimate clinical need",
+   "Refrain from accessing the records, as students should only view records of their own patients",
+   "Discuss the interesting findings with peers in the hospital cafeteria to get their input"
+  ],
+  "correct": 2,
+  "exp": "The lecture explicitly states: 'Only view your own patients' records' as a core confidentiality rule for medical students. Accessing records for educational curiosity (that option), discussing cases in public places (that option), and accessing then shredding notes (that option) all violate the stated confidentiality principles.",
+  "lecture": "FCP [VM 120] Everyday Ethics; Medical ethics and Medico-legal aspects (Lecture).pdf",
+  "topic": "Confidentiality / Medical Student Responsibilities",
+  "diff": "easy"
+ },
+ {
+  "q": "A surgeon intends to perform an appendectomy and correctly understands the procedure. During the operation, however, the surgeon inadvertently cuts the wrong structure because the hand movement did not match the intended action. Using the medical error classification described in the lecture, this error is BEST categorised as a:",
+  "opts": [
+   "Mistake, because the correct intention was formed but the wrong action was performed",
+   "Misperception, because information about the anatomy was incorrectly perceived",
+   "Breach of standard of care, because performing an unauthorised skill deviates from accepted practice",
+   "Slip, because information was correctly perceived and the correct intention was formed, but the wrong action was executed"
+  ],
+  "correct": 3,
+  "exp": "The lecture defines a 'slip' as: information correctly perceived, correct intention formed, but the wrong action is performed — the action is not what was intended. A 'misperception' involves incorrect perception of information; a 'mistake' involves forming an incorrect intention despite correct perception; a 'breach of standard of care' relates to negligence, not the error taxonomy used here.",
+  "lecture": "FCP [VM 120] Everyday Ethics; Medical ethics and Medico-legal aspects (Lecture).pdf",
+  "topic": "Medical Errors Classification",
+  "diff": "hard"
+ },
+ {
+  "q": "A 28-year-old man with newly diagnosed schizophrenia is started on haloperidol. Three days later he develops severe sustained contraction of the muscles of his neck and jaw. Which extrapyramidal side effect best describes this presentation, and what is its clinical urgency?",
+  "opts": [
+   "Tardive dyskinesia – serious but not an emergency",
+   "Acute dystonic reaction – emergency",
+   "Parkinsonian-like side effects – non-urgent",
+   "Akathisia – emergency"
+  ],
+  "correct": 1,
+  "exp": "The lecture explicitly classifies acute dystonic reaction as an emergency, describing it as severe spastic contraction in a group of muscles, which matches this presentation. Tardive dyskinesia is labelled 'serious' (not an emergency) and appears after prolonged use with involuntary facial/tongue movements. Akathisia is also an emergency but presents as a subjective feeling of muscle discomfort causing restlessness, not spastic contraction. Parkinsonian-like effects (rigidity, bradykinesia, tremor) are not classified as emergencies.",
+  "lecture": "FCP [VM 4.10] Psychopharmacology (Lecture).pdf",
+  "topic": "Antipsychotic side effects – FGA extrapyramidal effects",
+  "diff": "medium"
+ },
+ {
+  "q": "A 45-year-old woman with major depression has been on sertraline for four weeks with only a partial response. According to the prescribing principles outlined in the lecture, what is the most appropriate next step?",
+  "opts": [
+   "Titrate the dose upward looking for additional response, and consider switching if there is still poor response",
+   "Switch immediately to a tricyclic antidepressant as second-line therapy",
+   "Add lithium augmentation as the preferred strategy for partial response",
+   "Continue at the same dose for another six months before reassessing"
+  ],
+  "correct": 0,
+  "exp": "The lecture states: if there is a minor/low response, titrate the dose up looking for additional response; switching is better than augmenting, although combining medication is common after partial recovery. The four-week assessment point is the minimum before formal review. TCAs are only used at the fourth line, not second line (second line is usually a different SSRI). Continuing unchanged for six months ignores the partial response signal. Lithium augmentation is mentioned as effective but carries significant toxicity and is not the first action for partial response.",
+  "lecture": "FCP [VM 4.10] Psychopharmacology (Lecture).pdf",
+  "topic": "Antidepressant management principles",
+  "diff": "medium"
+ },
+ {
+  "q": "Lamotrigine is being considered for a patient with bipolar disorder who predominantly suffers from depressive episodes. Which mechanism best describes its pharmacological action, and which serious adverse effect requires strong prescribing warnings?",
+  "opts": [
+   "Acts as a voltage-gated sodium channel agonist inhibiting glutamate release – risk of Stevens-Johnson Syndrome",
+   "Blocks voltage-sensitive sodium channels and increases GABA – risk of spina bifida in pregnancy",
+   "Blocks voltage-sensitive Na+ channels and decreases norepinephrine turnover – risk of bone marrow depression",
+   "Inhibits secondary messenger enzymes including GSK3 – risk of renal oedema and hypothyroidism"
+  ],
+  "correct": 0,
+  "exp": "The lecture states lamotrigine is a voltage-gated sodium channel agonist that inhibits glutamate release, and carries a strong warning about Stevens-Johnson Syndrome appearing within the first 2–8 weeks. Another option describes sodium valproate's mechanism and teratogenicity risk. Another option describes lithium's mechanism and renal/thyroid side effects. Another option describes carbamazepine's mechanism and bone marrow depression side effect.",
+  "lecture": "FCP [VM 4.10] Psychopharmacology (Lecture).pdf",
+  "topic": "Mood stabilisers – lamotrigine mechanism and side effects",
+  "diff": "hard"
+ },
+ {
+  "q": "A patient with generalised anxiety disorder who has been taking a benzodiazepine long-term is switched to buspirone. The patient reports that the new drug 'doesn't seem to be working' and they still feel anxious. Which property of buspirone most likely explains this perception?",
+  "opts": [
+   "Buspirone improves cognitive anxiety but not somatic symptoms, leaving the patient feeling mentally anxious",
+   "Buspirone is a beta-blocker analogue and only suppresses peripheral symptoms such as tremor",
+   "Buspirone acts on GABA receptors and therefore requires weeks to up-regulate inhibitory tone",
+   "Buspirone has no sedative effect, so patients accustomed to benzodiazepine sedation do not experience the 'edge being taken off'"
+  ],
+  "correct": 3,
+  "exp": "The lecture explicitly states that buspirone will not reduce anxiety in patients used to benzodiazepines because there is no sedation effect to 'take the edge off'. Buspirone is a 5-HT1A agonist, not a GABA agonist (eliminating that option). Improving cognitive but not somatic anxiety is described for beta-blockers, not buspirone (eliminating that option). Another option confuses buspirone with beta-blockers like propranolol, which address somatic symptoms.",
+  "lecture": "FCP [VM 4.10] Psychopharmacology (Lecture).pdf",
+  "topic": "Anxiolytics – buspirone properties and limitations",
+  "diff": "hard"
+ }
+];
+let pool=[],idx=0,right=0,seen=0,answered=false;
+const lec=document.getElementById("lec"),diff=document.getElementById("diff"),shuf=document.getElementById("shuf"),stage=document.getElementById("stage"),score=document.getElementById("score");
+const lectures=[...new Set(DATA.map(d=>d.lecture))].sort();
+lec.innerHTML='<option value="ALL">All lectures</option>'+lectures.map(l=>`<option>${l}</option>`).join("");
+function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function build(){
+  pool=DATA.filter(d=>(lec.value==="ALL"||d.lecture===lec.value)&&(diff.value==="ALL"||d.diff===diff.value));
+  if(shuf.checked){for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}}
+  idx=0;right=0;seen=0;render();
+}
+function render(){
+ if(!pool.length){stage.innerHTML='<div class="card">No questions match this filter.</div>';score.textContent="";return;}
+ if(idx>=pool.length){stage.innerHTML=`<div class="card"><div class="q">Round complete</div>You scored ${right} of ${seen}. Press Start to go again.</div>`;score.textContent="";return;}
+ const d=pool[idx];answered=false;
+ // options shown in the EXACT order/letters of the spreadsheet (no reordering)
+ let h=`<div class="card"><span class="tag">${esc(d.lecture)}</span><span class="tag">${esc(d.topic)}</span><span class="tag">${esc(d.diff)}</span>
+  <div class="q">${esc(d.q)}</div><div class="opts">`;
+ d.opts.forEach((o,i)=>{h+=`<button class="opt" data-i="${i}">${String.fromCharCode(65+i)}. ${esc(o)}</button>`;});
+ h+=`</div><div class="exp" id="exp"><b>Correct answer: ${String.fromCharCode(65+d.correct)}.</b> ${esc(d.exp)}<div class="controls"><button class="primary" id="next">Next</button></div></div></div>`;
+ stage.innerHTML=h;
+ document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+   if(answered)return;answered=true;seen++;const pick=+b.getAttribute("data-i");
+   document.querySelectorAll(".opt").forEach((x,i)=>{x.disabled=true;if(i===d.correct)x.classList.add("correct");else if(i===pick)x.classList.add("wrong");});
+   if(pick===d.correct)right++;
+   document.getElementById("exp").classList.add("show");
+ });
+ document.getElementById("next").onclick=()=>{idx++;render();};
+ score.textContent=`Q ${idx+1} of ${pool.length} | score ${right}/${seen}`;
+}
+document.getElementById("start").onclick=build;build();
+</script></body></html>
